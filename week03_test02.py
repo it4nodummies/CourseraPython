@@ -1,20 +1,23 @@
-# Note - this code must run in Python 2.x and you must download
-# http://www.pythonlearn.com/code/BeautifulSoup.py
-# Into the same folder as this program
-
 import urllib
-from BeautifulSoup import *
+import xml.etree.ElementTree as ET
+# from week04_examination01 import listResult
 
-url = raw_input('Enter - ')
-html = urllib.urlopen(url).read()
+url = 'http://python-data.dr-chuck.net/comments_256136.xml'
 
-soup = BeautifulSoup(html)
 
-# Retrieve all of the anchor tags
-tags = soup('a')
-for tag in tags:
-    # Look at the parts of a tag
-    print 'TAG:',tag
-    print 'URL:',tag.get('href', None)
-    print 'Contents:',tag.contents[0]
-    print 'Attrs:',tag.attrs
+uh = urllib.urlopen(url)
+data = uh.read()
+
+print data
+
+stuff = ET.fromstring(data)
+listResult = stuff.findall('comments/comment')
+
+listCount = list()
+
+for item in listResult:
+    count = int(item.find('count').text)
+    listCount.append(count)
+
+print 'Sum:', sum(listCount)
+
